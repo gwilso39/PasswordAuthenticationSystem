@@ -9,6 +9,9 @@ namespace Password_Encryption_and_Authorization
     class Program
     {
 
+        //These should probably be in a struct and not a list - the
+        //user name and passwords should be together and easily searchable
+        //as a pair...
         public static List<string> inputUserName = new List<string>();
         public static List<string> inputPassword = new List<string>();
 
@@ -102,7 +105,7 @@ namespace Password_Encryption_and_Authorization
             return exit;
         }
 
-        //TODO - check pw against data structure
+        //received user name and password to determine if they match
         private static void AuthenticateUser()
         {
             int attempsAtLogin = 0;
@@ -155,12 +158,14 @@ namespace Password_Encryption_and_Authorization
 
         private static void EstablishUser()
         {
+            //inputUserName.Add("username");
             Console.Clear();
             Console.WriteLine("\nPASSWORD AUTHENTICATION SYSTEM\n");
             Console.WriteLine("Setup New User Account\n");
             Console.WriteLine("-----------------------------------------\n");
             Console.Write("Enter a user name: ");
             string typedUserName = (Console.ReadLine());
+
 
             foreach (string checkUserName in inputUserName)
             {
@@ -173,14 +178,15 @@ namespace Password_Encryption_and_Authorization
                 else
                 {
                     inputUserName.Add(Console.ReadLine());
+                    EstablishPassword();
                 }
             }
-            EstablishPassword();
         }
 
-        //Add encryption of some kind here
+        //TODO Add encryption of some kind here
         private static void EstablishPassword()
         {
+            inputPassword.Add("password");
             Console.Write("Enter a password: ");
             inputPassword.Add (Console.ReadLine());
             Console.WriteLine("Password Saved");
