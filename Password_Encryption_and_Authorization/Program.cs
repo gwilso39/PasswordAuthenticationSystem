@@ -8,6 +8,10 @@ namespace Password_Encryption_and_Authorization
 {
     class Program
     {
+
+        public static List<string> inputUserName = new List<string>();
+        public static List<string> inputPassword = new List<string>();
+
         static void Main(string[] args)
         {
             var input = false;
@@ -25,18 +29,23 @@ namespace Password_Encryption_and_Authorization
             } while (!input);
         }
 
+        //Main Menu - calls UserInput and acts on item methods
         private static void PasswordAuthentication()
         {
-
-            Console.WriteLine("\nPASSWORD AUTHENTICATION SYSTEM\n");
-            Console.WriteLine("-----------------------------------------\n");
-            Console.WriteLine("Please select one option:\n");
-            Console.WriteLine("1. Establish an account");
-            Console.WriteLine("2. Authenticate a user");
-            Console.WriteLine("3. Exit the system\n");
-            UserInput();
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("\nPASSWORD AUTHENTICATION SYSTEM\n");
+                Console.WriteLine("-----------------------------------------\n");
+                Console.WriteLine("Please select one option:\n");
+                Console.WriteLine("1. Establish an account");
+                Console.WriteLine("2. Authenticate a user");
+                Console.WriteLine("3. Exit the system\n");
+            }
+            while (!(ActOnSelectedItem(UserInput())));
         }
 
+        //Obtains User Input and returns selection 
         public static int UserInput()
         {
             var input = false;
@@ -70,14 +79,15 @@ namespace Password_Encryption_and_Authorization
 
         }
 
-        private bool ActOnSelectedItem(int selection)
+        //switch case to determine which method to call based on selection
+        private static bool ActOnSelectedItem(int selection)
         {
             var exit = false;
 
             switch (selection)
             {
                 case 1:
-                    EstablishAccount();
+                    EstablishUser();
                     break;
                 case 2:
                     AuthenticateUser();
@@ -92,21 +102,89 @@ namespace Password_Encryption_and_Authorization
             return exit;
         }
 
-        private void AuthenticateUser()
+        //TODO - check pw against data structure
+        private static void AuthenticateUser()
         {
-            throw new NotImplementedException();
+            int attempsAtLogin = 0;
+
+            for (int i = 0; i<3; i++)
+            {
+                Console.Clear();
+                Console.WriteLine("\nPASSWORD AUTHENTICATION SYSTEM\n");
+                Console.WriteLine("Authenticate User and Password\n");
+                Console.WriteLine("-----------------------------------------\n");
+                Console.Write("Enter your user name: ");
+                string typedUserName = Console.ReadLine();
+
+                foreach (string checkedUserName in inputUserName)
+                {
+                    if (typedUserName == checkedUserName)
+                    {
+                        Console.Write("Enter your password: ");
+                        string typedPassword = Console.ReadLine();
+
+                        foreach (string checkedPassword in inputPassword)
+                        {
+                            if (typedPassword == checkedPassword)
+                            {
+                                Console.WriteLine("Authentication Successful");
+                                Console.ReadKey();
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid Password");
+                                attempsAtLogin++;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid User Name");
+                    }
+
+                }
+            }
+            if (attempsAtLogin > 2)
+                Console.WriteLine("You have failed to authenticate.");
+            else
+            {
+                Console.WriteLine("You have successfully authenticated.");
+            }
+            Console.ReadKey();
         }
 
-        private void EstablishAccount()
+        private static void EstablishUser()
         {
             Console.Clear();
             Console.WriteLine("\nPASSWORD AUTHENTICATION SYSTEM\n");
             Console.WriteLine("Setup New User Account\n");
             Console.WriteLine("-----------------------------------------\n");
             Console.Write("Enter a user name: ");
-            Console.WriteLine("1. Establish an account");
-            Console.WriteLine("2. Authenticate a user");
-            Console.WriteLine("3. Exit the system\n");
+            string typedUserName = (Console.ReadLine());
+
+            foreach (string checkUserName in inputUserName)
+            {
+                if (checkUserName == typedUserName)
+                {
+                    Console.WriteLine("This User Name is already in use.\n");
+                    Console.WriteLine("Press enter to return.");
+                    Console.ReadKey();
+                }
+                else
+                {
+                    inputUserName.Add(Console.ReadLine());
+                }
+            }
+            EstablishPassword();
+        }
+
+        //Add encryption of some kind here
+        private static void EstablishPassword()
+        {
+            Console.Write("Enter a password: ");
+            inputPassword.Add (Console.ReadLine());
+            Console.WriteLine("Password Saved");
+            Console.ReadKey();
         }
     }
 }
