@@ -16,11 +16,8 @@ namespace Password_Encryption_and_Authorization
         Dictionary<string, string> accounts = new Dictionary<string, string>();
 
         //Method to read in new username and password
-        public void GetUserNameAndPassword()
+        private void CreatePassword()
         {
-
-            this.username = Console.ReadLine();
-
             //this will mask the user's input and store the characters as this.password.
             Console.Write("Please enter a password: ");
             char chr = (char)0;
@@ -33,34 +30,24 @@ namespace Password_Encryption_and_Authorization
                 maskedPassword += chr;
             } while (chr != ENTER);
 
-            this.password = maskedPassword;
-
-            
             using (MD5 md5Hash = MD5.Create())
             {
-                string hash = GetMd5Hash(md5Hash, this.password);
+                string hash = GetMd5Hash(md5Hash, maskedPassword);
 
-                Console.WriteLine("The MD5 hash of " + this.password + " is: " + hash + ".");
-
-                //inserted here because the order of the previous readline outputs wrong...
-                Console.ReadLine();
-
-
-
-
-                Console.WriteLine("Verifying the hash...");
-
-                if (VerifyMd5Hash(md5Hash, this.password, hash))
-                {
-                    Console.WriteLine("The hashes are the same.");
-                }
-                else
-                {
-                    Console.WriteLine("The hashes are not same.");
-                }
+                //Code used to test if hash was working - from MSDN documentation
+                //    Console.WriteLine("The MD5 hash of " + this.password + " is: " + hash + ".");
+                //    Console.WriteLine("Verifying the hash...");
+                //    if (VerifyMd5Hash(md5Hash, this.password, hash))
+                //    {
+                //        Console.WriteLine("The hashes are the same.");
+                //    }
+                //    else
+                //    {
+                //        Console.WriteLine("The hashes are not same.");
+                //    }
+                //}
             }
         }
-
 
 
         static string GetMd5Hash(MD5 md5Hash, string password)
@@ -83,8 +70,6 @@ namespace Password_Encryption_and_Authorization
             return sBuilder.ToString();
         }
 
-        
-        
         // Verify a hash against a string.
         static bool VerifyMd5Hash(MD5 md5Hash, string password, string hash)
         {
@@ -103,8 +88,7 @@ namespace Password_Encryption_and_Authorization
                 return false;
             }
         }
-        
-        
+                
         //received user name and password to determine if they match
         public void AuthenticateUser()
         {
@@ -164,24 +148,28 @@ namespace Password_Encryption_and_Authorization
             Console.WriteLine("Setup New User Account\n");
             Console.WriteLine("-----------------------------------------\n");
             Console.Write("Enter a user name: ");
+            this.username = Console.ReadLine();
 
-            GetUserNameAndPassword();
+            CreateUserName();
+            CreatePassword();
+            accounts.Add(username, password);
+        }
 
-
-            //foreach (val checkUserName in accounts)
-            //{
-            //    if (checkUserName == typedUserName)
-            //    {
-            //        Console.WriteLine("This User Name is already in use.\n");
-            //        Console.WriteLine("Press enter to return.");
-            //        Console.ReadKey();
-            //    }
-            //    else
-            //    {
-            //        inputUserName.Add(Console.ReadLine());
-            //        EstablishPassword();
-            //    }
-            //}
+        private void CreateUserName()
+        {
+            foreach (KeyValuePair<string, string> element in accounts)
+            {
+                if (this.username == element.Key)
+                {
+                    Console.WriteLine("This User Name is already in use.\n");
+                    Console.WriteLine("Press enter to return.");
+                    Console.ReadKey();
+                }
+                else
+                {
+                    username = this.username;
+                }
+            };
         }
     }
 }
