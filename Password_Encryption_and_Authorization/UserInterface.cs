@@ -9,6 +9,9 @@ namespace Password_Encryption_and_Authorization
     class UserInterface
     {
         //Main Menu - calls UserInput and acts on item methods
+        Users u = new Users();
+
+        //initial selection interface - runs a loop unless user selects exit
         public void PasswordAuthentication()
         {
             do
@@ -46,7 +49,6 @@ namespace Password_Encryption_and_Authorization
                     {
                         Console.WriteLine("Enter selection between 1 and 3. Try again.\n");
                     }
-
                 }
                 catch (FormatException)
                 {
@@ -59,17 +61,17 @@ namespace Password_Encryption_and_Authorization
         }
 
         //switch case to determine which method to call based on selection
-        private static bool ActOnSelectedItem(int selection)
+        private bool ActOnSelectedItem(int selection)
         {
             var exit = false;
 
             switch (selection)
             {
                 case 1:
-                    new Users().EstablishUser();
+                    u.EstablishUser();
                     break;
                 case 2:
-                    new Users().AuthenticateUser();
+                    u.AuthenticateUser();
                     break;
                 case 3:
                     exit = true;
@@ -80,7 +82,5 @@ namespace Password_Encryption_and_Authorization
             }
             return exit;
         }
-
     }
-
 }
